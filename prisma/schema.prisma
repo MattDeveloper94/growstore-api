@@ -8,28 +8,72 @@ datasource db {
   schemas  = ["db_growstore_schemas"]
 }
 
+enum Role {
+  CUSTOMER
+  SELLER
+  ADMIN
+
+  @@schema("db_growstore_schemas")
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+
+  @@schema("db_growstore_schemas")
+}
+
 model User {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String   @db.VarChar(60)
   email     String   @unique @db.VarChar(60)
   password  String   @db.VarChar(80)
   birthDate DateTime @map("birth_date") @db.Date
+  role      Role     @default(CUSTOMER)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
   cart      Cart?
+  addresses Address[]
+  orders    Order[]
 
   @@map("user")
+  @@schema("db_growstore_schemas")
+}
+
+model Address {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  label          String  @db.VarChar(30)
+  street         String  @db.VarChar(80)
+  number         String  @db.VarChar(10)
+  complement     String? @db.VarChar(80)
+  neighborhood   String  @db.VarChar(60)
+  city           String  @db.VarChar(30)
+  state          String  @db.VarChar(30)
+  zipCode        String  @db.VarChar(20)
+  country        String  @db.VarChar(30)
+  referencePoint String? @map("reference_point") @db.VarChar(60)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId String  @map("user_id") @db.Uuid
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orders Order[]
+
+  @@map("address")
   @@schema("db_growstore_schemas")
 }
 
 model Cart {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   userId    String     @unique @db.Uuid
-  user      User       @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cartItems CartItem[]
 
   @@map("cart")
@@ -52,17 +96,17 @@ model CartItem {
 }
 
 model Product {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  productName String  @map("product_name") @db.VarChar(100)
-  description String  @db.VarChar(300)
-  brand       String  @db.VarChar(20)
-  collection  String? @db.VarChar(60)
-  material    String  @db.VarChar(60)
-  gender      String  @db.VarChar(40)
-  status      String  @db.VarChar(40)
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  productName String        @map("product_name") @db.VarChar(100)
+  description String        @db.VarChar(300)
+  brand       String        @db.VarChar(20)
+  collection  String?       @db.VarChar(60)
+  material    String        @db.VarChar(60)
+  gender      String        @db.VarChar(40)
+  status      ProductStatus @default(DRAFT)
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   categoryId      String           @map("category_id") @db.Uuid
   category        Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -81,14 +125,29 @@ model ProductVariant {
   price Decimal @db.Decimal(10, 2)
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   productId     String         @map("product_id") @db.Uuid
   product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productImages ProductImage[]
   cartItems     CartItem[]
+  orderItems    OrderItem[]
 
   @@map("product_variant")
+  @@schema("db_growstore_schemas")
+}
+
+model ProductImage {
+  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url          String
+  altText      String @map("alt_text") @db.VarChar(60)
+  displayOrder Int    @default(1) @map("display_order")
+
+  productVariantId String         @map("product_variant_id") @db.Uuid
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([productVariantId, displayOrder])
+  @@map("product_image")
   @@schema("db_growstore_schemas")
 }
 
@@ -97,7 +156,7 @@ model Category {
   name String @db.VarChar(80)
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   products Product[]
 
@@ -105,15 +164,37 @@ model Category {
   @@schema("db_growstore_schemas")
 }
 
-model ProductImage {
-  id           String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  url          String
-  altText      String @map("alt_text") @db.VarChar(60)
-  displayOrder Int    @map("display_order")
+model Order {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  totalAmount Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  productVariantId String         @map("produto_varaint_id") @db.Uuid
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
 
-  @@map("product_image")
+  addressId  String      @map("address_id") @db.Uuid
+  address    Address     @relation(fields: [addressId], references: [id])
+  orderItems OrderItem[]
+
+  @@map("order")
+  @@schema("db_growstore_schemas")
+}
+
+model OrderItem {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  productName String  @db.VarChar(80)
+  sku         String  @db.VarChar(60)
+  quantity    Int
+  unitPrice   Decimal @map("unit_price") @db.Decimal(10, 2)
+
+  orderId String @map("order_id") @db.Uuid
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  productVariantId String         @map("product_variant_id") @db.Uuid
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+
+  @@unique([orderId, productVariantId])
+  @@map("order_item")
   @@schema("db_growstore_schemas")
 }
