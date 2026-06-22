@@ -6,3 +6,5 @@ export const createUserSchema = z.object({
     password: z.string().min(6, "Password must have at least 6 characters"),
     birthDate: z.iso.date()
 });
+
+export type CreateUserDto = z.infer<typeof createUserSchema>;

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateUserDto } from "./dto/createUser.dto";
+import { CreateUserDto } from "./schemas/createUser.schema";
 import { UserService } from "./user.service";
 
 const userService = new UserService();
