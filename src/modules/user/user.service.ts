@@ -1,4 +1,4 @@
-import { CreateUserDto } from "./dto/createUser.dto";
+import { CreateUserDto } from "./schemas/createUser.schema";
 import { UserRepository } from "./user.repository";
 
 const userRepository = new UserRepository();
