@@ -16,11 +16,4 @@ router.post("/register", validateBody(createUserSchema),
         }
     });
 
-router.get("/me", authMiddleware, (req, res) => {
-    return res.json({
-        ok: true,
-        user: req.user,
-    });
-});
-
 export default router
