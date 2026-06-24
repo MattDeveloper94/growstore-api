@@ -17,10 +17,17 @@ enum Role {
 }
 
 enum ProductStatus {
-  DRAFT
   ACTIVE
   INACTIVE
   DISCONTINUED
+
+  @@schema("db_growstore_schemas")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNISEX
 
   @@schema("db_growstore_schemas")
 }
@@ -98,12 +105,12 @@ model CartItem {
 model Product {
   id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   productName String        @map("product_name") @db.VarChar(100)
-  description String        @db.VarChar(300)
-  brand       String        @db.VarChar(20)
+  description String        @db.VarChar(1000)
+  brand       String        @db.VarChar(60)
   collection  String?       @db.VarChar(60)
   material    String        @db.VarChar(60)
-  gender      String        @db.VarChar(40)
-  status      ProductStatus @default(DRAFT)
+  gender      Gender
+  status      ProductStatus @default(ACTIVE)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -153,7 +160,7 @@ model ProductImage {
 
 model Category {
   id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name String @db.VarChar(80)
+  name String @unique @db.VarChar(80)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

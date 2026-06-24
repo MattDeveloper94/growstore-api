@@ -3,6 +3,7 @@ import { compareSync } from "bcrypt";
 import { UserRepository } from "../user/user.repository";
 import jwt from "jsonwebtoken";
 import { envs } from "../../config/env";
+import { AppError } from "../../middlewares/error.handler";
 
 const userRepository = new UserRepository();
 
@@ -10,12 +11,12 @@ export class AuthService {
     public async login(data: LoginDto) {
         const user = await userRepository.findByEmail(data.email)
         if (!user)
-            throw new Error("Invalid credentials");
+            throw new AppError("Invalid credentials", 401);
 
         const comparePassword = compareSync(data.password, user.password)
 
         if (!comparePassword)
-            throw new Error("Invalid credentials");
+            throw new AppError("Invalid credentials", 401);
 
         const token = jwt.sign({
             id: user.id,

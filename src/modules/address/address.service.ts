@@ -1,3 +1,4 @@
+import { AppError } from "../../middlewares/error.handler";
 import { AddressRepository } from "./address.repository";
 import { CreateAddressDto } from "./schemas/create.address.schema";
 
@@ -10,7 +11,7 @@ export class AddressService {
         const cepData = await response.json();
 
         if (cepData.erro)
-            throw new Error("Invalid CEP!");
+            throw new AppError("Invalid CEP!", 400);
 
         const addressData = {
             ...data,

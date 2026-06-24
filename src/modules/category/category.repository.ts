@@ -7,4 +7,20 @@ export class CategoryRepository {
             data
         });
     }
+
+    public async findById(id: string) {
+        return await prisma.category.findUnique({
+            where: {
+                id
+            }
+        })
+    }
+
+    public async findByName(name: string) {
+        return await prisma.category.findFirst({
+            where: {
+                name
+            }
+        });
+    }
 }
