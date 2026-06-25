@@ -6,6 +6,7 @@ import authRouter from "./modules/auth/auth.routes";
 import addressRouter from "./modules/address/address.routes";
 import categoryRouter from "./modules/category/category.routes";
 import productRouter from "./modules/product/product/product.routes";
+import productVariantRouter from "./modules/product/productVariant/productVariant.routes";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use("/api", authRouter);
 app.use("/api", addressRouter);
 app.use("/api", categoryRouter);
 app.use("/api", productRouter);
+app.use("/api", productVariantRouter);
 app.get("/", (req, res) => {
     res.send("API RUNNING!")
 });
