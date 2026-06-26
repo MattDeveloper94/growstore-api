@@ -16,9 +16,6 @@ export class ProductService {
 
         const product = await productRepository.createProduct(data);
 
-        return {
-            ok: true,
-            data: product
-        }
+        return product;
     }
 }

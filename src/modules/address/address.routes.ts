@@ -7,7 +7,7 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 const addressController = new AddressController();
 const router = Router();
 
-router.post("/register/address", validateBody(createAddressSchema), authMiddleware,
+router.post("/address", validateBody(createAddressSchema), authMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await addressController.createAddress(req, res)

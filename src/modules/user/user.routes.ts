@@ -7,7 +7,7 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 const userController = new UserController();
 const router = Router();
 
-router.post("/register", validateBody(createUserSchema),
+router.post("/users", validateBody(createUserSchema),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await userController.create(req, res)
@@ -16,4 +16,4 @@ router.post("/register", validateBody(createUserSchema),
         }
     });
 
-export default router
+export default router;

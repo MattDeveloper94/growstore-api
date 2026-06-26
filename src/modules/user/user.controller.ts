@@ -8,10 +8,13 @@ export class UserController {
     public async create(req: Request<any, any, CreateUserDto>, res: Response) {
         const { name, email, password, birthDate } = req.body
 
-        const result = await userService.createUser({
+        const user = await userService.createUser({
             name, email, password, birthDate
         });
 
-        return res.status(201).json(result)
+        return res.status(201).json({
+            ok: true,
+            data: user
+        })
     }
 }

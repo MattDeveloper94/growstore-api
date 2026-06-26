@@ -8,6 +8,9 @@ export class ProductController {
     public async createProduct(req: Request<any, any, CreateProductDto>, res: Response) {
         const product = await productService.createProduct(req.body)
 
-        return res.status(201).json(product);
+        return res.status(201).json({
+            ok: true,
+            data: product
+        });
     }
 }

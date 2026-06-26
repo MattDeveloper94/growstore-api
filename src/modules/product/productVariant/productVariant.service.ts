@@ -29,9 +29,6 @@ export class ProductVariantService {
 
         const productVariant = await productVariantRepository.createProductVariant(data, skuData);
 
-        return {
-            ok: true,
-            data: productVariant
-        }
+        return productVariant;
     }
 }

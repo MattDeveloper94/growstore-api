@@ -31,6 +31,13 @@ export class ProductVariantRepository {
         return await prisma.productVariant.findUnique({
             where: {
                 id
+            },
+            include: {
+                product: {
+                    select: {
+                        status: true
+                    }
+                }
             }
         })
     }

@@ -14,9 +14,6 @@ export class CategoryService {
 
         const category = await categoryRepository.createCategory(data)
 
-        return {
-            ok: true,
-            data: category
-        }
+        return category;
     }
 }

@@ -26,9 +26,6 @@ export class AuthService {
             { expiresIn: "1h" }
         );
 
-        return {
-            ok: true,
-            token
-        }
+        return token;
     }
 }

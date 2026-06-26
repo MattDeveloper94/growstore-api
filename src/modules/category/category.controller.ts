@@ -8,6 +8,9 @@ export class CategoryController {
     public async createCategory(req: Request<any, any, CreateCategoryDto>, res: Response) {
         const createdCategory = await categoryService.createCategory(req.body)
 
-        return res.status(201).json(createdCategory);
+        return res.status(201).json({
+            ok: true,
+            data: createdCategory
+        });
     }
 }

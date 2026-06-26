@@ -8,6 +8,9 @@ export class AddressController {
     public async createAddress(req: Request<any, any, CreateAddressDto>, res: Response) {
         const createdAddress = await addressService.createAddress(req.body, req.user!.id);
 
-        return res.status(201).json(createdAddress);
+        return res.status(201).json({
+            ok: true,
+            data: createdAddress
+        });
     }
 }

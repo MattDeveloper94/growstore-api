@@ -9,7 +9,10 @@ export class UserRepository {
             data: {
                 ...data,
                 password: hashPassword,
-                birthDate: new Date(data.birthDate)
+                birthDate: new Date(data.birthDate),
+                cart: {
+                    create: {}
+                }
             }
         });
     }

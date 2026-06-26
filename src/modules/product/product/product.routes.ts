@@ -10,7 +10,7 @@ import { Role } from "../../../../generated/prisma/enums";
 const router = Router();
 const productController = new ProductController();
 
-router.post("/register/product",
+router.post("/product",
     validateBody(createProductSchema),
     authMiddleware,
     roleMiddleware(Role.SELLER, Role.ADMIN),

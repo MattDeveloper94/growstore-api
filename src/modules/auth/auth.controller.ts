@@ -13,6 +13,9 @@ export class AuthController {
             password
         })
 
-        return res.status(200).json(validateLogin);
+        return res.status(200).json({
+            ok: true,
+            token: validateLogin
+        });
     }
 }

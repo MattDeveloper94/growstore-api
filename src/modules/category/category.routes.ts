@@ -9,7 +9,7 @@ import { Role } from "../../../generated/prisma/enums";
 const categoryController = new CategoryController();
 const router = Router();
 
-router.post("/register/category",
+router.post("/category",
     validateBody(createCategorySchema),
     authMiddleware,
     roleMiddleware(Role.ADMIN),

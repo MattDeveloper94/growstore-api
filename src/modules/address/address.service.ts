@@ -27,9 +27,6 @@ export class AddressService {
         };
 
         const address = await addressRepository.createAddress(addressData);
-        return {
-            ok: true,
-            data: address
-        };
+        return address;
     }
 }
