@@ -7,7 +7,7 @@ import { createCartItemSchema } from "./schemas/create.cartitem.schema";
 const cartItemController = new CartItemController();
 const router = Router();
 
-router.post("/cartitems",
+router.post("/carts/items",
     validateBody(createCartItemSchema),
     authMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {

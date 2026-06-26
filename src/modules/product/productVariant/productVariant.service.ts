@@ -27,6 +27,12 @@ export class ProductVariantService {
             throw new AppError("Product not found", 404);
         }
 
+        const variantAlreadyExists = await productVariantRepository.findByProductColorAndSize(data.productId, data.color, data.size);
+
+        if (variantAlreadyExists) {
+            throw new AppError("Product variant already exists", 409);
+        }
+
         const productVariant = await productVariantRepository.createProductVariant(data, skuData);
 
         return productVariant;

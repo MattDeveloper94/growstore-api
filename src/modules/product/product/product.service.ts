@@ -10,9 +10,8 @@ export class ProductService {
     public async createProduct(data: CreateProductDto) {
         const category = await categoryRepository.findById(data.categoryId);
 
-        if (!category) {
+        if (!category)
             throw new AppError("Category not found", 404);
-        }
 
         const product = await productRepository.createProduct(data);
 

@@ -10,7 +10,7 @@ import { Role } from "../../../../generated/prisma/enums";
 const productVariantController = new ProductVariantController();
 const router = Router();
 
-router.post("/product/variant",
+router.post("/products/variants",
     validateBody(createProductVariantSchema),
     authMiddleware,
     roleMiddleware(Role.SELLER, Role.ADMIN),

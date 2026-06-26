@@ -41,4 +41,16 @@ export class ProductVariantRepository {
             }
         })
     }
+
+    public async findByProductColorAndSize(productId: string, color: string, size: string) {
+        return await prisma.productVariant.findUnique({
+            where: {
+                productId_color_size: {
+                    productId,
+                    color,
+                    size
+                }
+            }
+        });
+    }
 }

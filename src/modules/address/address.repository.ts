@@ -7,4 +7,12 @@ export class AddressRepository {
             data
         });
     }
+
+    public async findById(id: string) {
+        return await prisma.address.findUnique({
+            where: {
+                id
+            }
+        })
+    }
 }

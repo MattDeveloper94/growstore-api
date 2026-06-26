@@ -79,7 +79,7 @@ model Cart {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  userId    String     @unique @db.Uuid
+  userId    String     @unique @map("user_id") @db.Uuid
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cartItems CartItem[]
 
@@ -140,6 +140,7 @@ model ProductVariant {
   cartItems     CartItem[]
   orderItems    OrderItem[]
 
+  @@unique([productId, color, size])
   @@map("product_variant")
   @@schema("db_growstore_schemas")
 }
@@ -173,7 +174,8 @@ model Category {
 
 model Order {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  totalAmount Decimal  @db.Decimal(10, 2)
+  orderNumber Int      @unique @default(autoincrement()) @map("order_number")
+  totalAmount Decimal  @map("total_amount") @db.Decimal(10, 2)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -190,7 +192,7 @@ model Order {
 
 model OrderItem {
   id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  productName String  @db.VarChar(80)
+  productName String  @map("product_name") @db.VarChar(80)
   sku         String  @db.VarChar(60)
   quantity    Int
   unitPrice   Decimal @map("unit_price") @db.Decimal(10, 2)

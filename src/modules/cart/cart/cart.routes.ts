@@ -5,7 +5,7 @@ import { CartController } from "./cart.controller";
 const cartController = new CartController();
 const router = Router();
 
-router.get("/cart/me", authMiddleware,
+router.get("/carts/me", authMiddleware,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await cartController.getCart(req, res)

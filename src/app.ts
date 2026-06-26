@@ -9,6 +9,7 @@ import productRouter from "./modules/product/product/product.routes";
 import productVariantRouter from "./modules/product/productVariant/productVariant.routes";
 import cartItemRouter from "./modules/cart/cartItem/cartItem.routes";
 import findCartMe from "./modules/cart/cart/cart.routes";
+import orderRouter from "./modules/order/order/order.routes";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api", productRouter);
 app.use("/api", productVariantRouter);
 app.use("/api", cartItemRouter);
 app.use("/api", findCartMe);
+app.use("/api", orderRouter);
 app.get("/", (req, res) => {
     res.send("API RUNNING!")
 });

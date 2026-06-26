@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { CreateProductVariantDto } from "./schemas/productVariant.schema";
 import { ProductVariantService } from "./productVariant.service";
 
