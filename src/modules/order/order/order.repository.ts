@@ -11,7 +11,18 @@ export class OrderRepository {
     public async findById(id: string) {
         return await prisma.order.findUnique({
             where: {
-                id
+                id,
+            },
+            include: {
+                address: true,
+                orderItems: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    }
+                }
             }
         });
     }

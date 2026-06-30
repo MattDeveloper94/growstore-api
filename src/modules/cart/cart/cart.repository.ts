@@ -37,4 +37,12 @@ export class CartRepository {
             }
         });
     }
+
+    public async deleteAll(cartId: string) {
+        return await prisma.cartItem.deleteMany({
+            where: {
+                cartId,
+            }
+        });
+    }
 }

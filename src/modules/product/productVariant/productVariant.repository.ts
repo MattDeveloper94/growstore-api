@@ -19,6 +19,17 @@ export class ProductVariantRepository {
         })
     }
 
+    public async updateStock(id: string, stock: number) {
+        return await prisma.productVariant.update({
+            where: {
+                id,
+            },
+            data: {
+                stock
+            }
+        })
+    }
+
     public async findBySku(sku: string) {
         return await prisma.productVariant.findUnique({
             where: {
